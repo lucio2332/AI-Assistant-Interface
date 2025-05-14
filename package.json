@@ -1,18 +1,31 @@
 {
   "name": "ai-assistant",
   "version": "1.0.0",
+  "description": "A desktop AI assistant built with Electron and TypeScript",
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "tsc"
+    "dev": "tsc --watch",
+    "build": "tsc && npm run copy-html",
+    "copy-html": "copyfiles -u 1 src/overlay.html dist"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Lucio Riley",
+  "license": "MIT",
+  "keywords": [
+    "electron",
+    "ai",
+    "assistant",
+    "desktop",
+    "typescript"
+  ],
+  "type": "commonjs",
   "devDependencies": {
     "@types/node": "^22.15.17",
+    "copyfiles": "^2.4.1",
     "electron": "^36.2.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "screenshot-desktop": "latest"
   }
 }

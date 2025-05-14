@@ -9,7 +9,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-  win.loadFile('public/index.html');
+  win.loadFile('src/overlay.html');
 }
 
 app.whenReady().then(createWindow);

@@ -1,11 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "strict": true,
+    "target": "ES2022",                        // Slightly newer syntax (still safe)
+    "module": "CommonJS",                      // Electron main process uses CommonJS
+    "lib": ["ES2022", "DOM"],                  // Full access to Node + Browser APIs
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "outDir": "dist",
-    "rootDir": "src"
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,                 // If you ever want to import .json files
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "noImplicitReturns": true,                 // Helps catch missing return paths
+    "noUnusedLocals": true,                    // Clean code, no unused vars
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
