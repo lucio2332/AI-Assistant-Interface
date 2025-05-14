@@ -32,17 +32,78 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/main.ts
 const electron_1 = require("electron");
 const path = __importStar(require("path"));
-function createWindow() {
-    const win = new electron_1.BrowserWindow({
-        width: 400,
-        height: 600,
+const fs = __importStar(require("fs"));
+const screenshot_desktop_1 = __importDefault(require("screenshot-desktop"));
+let tray;
+let overlayWindow = null;
+const assetsPath = path.join(__dirname, '../assets');
+const screenshotPath = path.join(assetsPath, 'desktop.png');
+async function createOverlayWindow() {
+    if (overlayWindow)
+        return;
+    overlayWindow = new electron_1.BrowserWindow({
+        fullscreen: true,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        skipTaskbar: true,
+        focusable: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-        },
+            contextIsolation: true
+        }
     });
-    win.loadFile('src/overlay.html');
+    overlayWindow.loadFile(path.join(__dirname, 'overlay.html'));
+    overlayWindow.on('closed', () => {
+        overlayWindow = null;
+    });
+    // Wait for renderer to load before showing
+    overlayWindow.once('ready-to-show', () => {
+        overlayWindow?.show();
+        overlayWindow?.webContents.send('update-background');
+    });
 }
-electron_1.app.whenReady().then(createWindow);
+async function activateOverlay() {
+    // Take screenshot and save to assets
+    try {
+        const img = await (0, screenshot_desktop_1.default)({ format: 'png' });
+        fs.writeFileSync(screenshotPath, img);
+    }
+    catch (err) {
+        console.error('Screenshot failed:', err);
+        return;
+    }
+    await createOverlayWindow();
+}
+electron_1.app.whenReady().then(() => {
+    // Create Tray
+    const trayIcon = electron_1.nativeImage.createFromPath(path.join(assetsPath, 'tray.png'));
+    tray = new electron_1.Tray(trayIcon);
+    tray.setToolTip('AI Overlay App');
+    tray.on('click', () => {
+        if (overlayWindow) {
+            overlayWindow.close();
+            overlayWindow = null;
+        }
+    });
+    // Global shortcut to toggle
+    electron_1.globalShortcut.register('Control+Shift+B', () => {
+        if (overlayWindow) {
+            overlayWindow.close();
+            overlayWindow = null;
+        }
+        else {
+            activateOverlay();
+        }
+    });
+});
+electron_1.app.on('will-quit', () => {
+    electron_1.globalShortcut.unregisterAll();
+});

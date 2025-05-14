@@ -1,15 +1,52 @@
+<!-- overlay.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>AI Assistant</title>
-  </head>
-  <body>
-    <h2>Ask AI:</h2>
-    <input id="input" placeholder="Type your question..." />
-    <button onclick="askAI()">Send</button>
-    <pre id="output"></pre>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Overlay</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
 
-    <script src="../dist/overlay.js"></script>
-  </body>
+    body {
+      background: url('../assets/desktop.png') no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #input-container {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    input {
+      font-size: 1.25rem;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 6px;
+      width: 300px;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="input-container">
+    <input type="text" placeholder="Ask AI..." autofocus />
+  </div>
+  <script type="module" src="overlay.js"></script>
+</body>
 </html>

@@ -21,6 +21,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^22.15.17",
+    "@types/screenshot-desktop": "^1.12.3",
     "copyfiles": "^2.4.1",
     "electron": "^36.2.0",
     "typescript": "^5.4.5"
